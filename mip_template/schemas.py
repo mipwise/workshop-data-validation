@@ -96,7 +96,7 @@ output_schema = PanDatFactory(
 # region DATA TYPES AND PREDICATES - INPUT SCHEMA
 # region skus table
 table = 'skus'
-input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, strings_allowed='*')
 input_schema.set_data_type(table=table, field='SKU Name', number_allowed=False, strings_allowed='*', nullable=False)
 input_schema.set_data_type(table=table, field='Units per Case', number_allowed=True, strings_allowed=(),
                            must_be_int=True, min=1, inclusive_min=True)
@@ -104,7 +104,7 @@ input_schema.set_data_type(table=table, field='Units per Case', number_allowed=T
 # endregion
 # region suppliers table
 table = 'suppliers'
-input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*')
 input_schema.set_data_type(table=table, field='Supplier Name', number_allowed=False, strings_allowed='*', nullable=False)
 input_schema.set_data_type(table=table, field='Status', number_allowed=False,
                            strings_allowed=['Consolidated', 'New', 'Potential'])
@@ -112,8 +112,8 @@ input_schema.set_data_type(table=table, field='Status', number_allowed=False,
 # endregion
 # region price_tiers table
 table = 'price_tiers'
-input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, strings_allowed='*', nullable=False)
-input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, strings_allowed='*')
+input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*')
 input_schema.set_data_type(table=table, field='Tier ID', number_allowed=True, strings_allowed=(),
                            must_be_int=True, min=1, inclusive_min=True, max=float("inf"), inclusive_max=False)
 input_schema.set_data_type(table=table, field='Tier Start', number_allowed=True, strings_allowed=False, min=0,
