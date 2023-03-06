@@ -90,7 +90,7 @@ input_schema.add_parameter('MIP Gap', default_value=0.05, number_allowed=True, s
 # region OUTPUT SCHEMA
 output_schema = PanDatFactory(
     skus_suppliers=[['SKU ID', 'Supplier ID'], ['SKU Name', 'Supplier Name', 'Order Quantity', 'Total Cost',
-                                                'Container Type']])
+                                                'Container Utilization']])
 # endregion
 
 # region DATA TYPES AND PREDICATES - INPUT SCHEMA
@@ -116,11 +116,11 @@ input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, st
 input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*')
 input_schema.set_data_type(table=table, field='Tier ID', number_allowed=True, strings_allowed=(),
                            must_be_int=True, min=1, inclusive_min=True, max=float("inf"), inclusive_max=False)
-input_schema.set_data_type(table=table, field='Tier Start', number_allowed=True, strings_allowed=False, min=0,
+input_schema.set_data_type(table=table, field='Tier Start', number_allowed=True, strings_allowed=(), min=0,
                            must_be_int=False, inclusive_min=True, max=float("inf"), inclusive_max=False)
-input_schema.set_data_type(table=table, field='Tier End', number_allowed=True, strings_allowed=False, min=0,
+input_schema.set_data_type(table=table, field='Tier End', number_allowed=True, strings_allowed=(), min=0,
                            must_be_int=False, inclusive_min=False, max=float("inf"), inclusive_max=False)
-input_schema.set_data_type(table=table, field='Price', number_allowed=True, strings_allowed=False, min=0,
+input_schema.set_data_type(table=table, field='Price', number_allowed=True, strings_allowed=(), min=0,
                            inclusive_min=False, max=100, inclusive_max=False)
 
 input_schema.add_foreign_key(native_table=table, foreign_table='skus', mappings=('SKU ID', 'SKU ID'))
