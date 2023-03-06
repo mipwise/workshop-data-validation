@@ -22,7 +22,7 @@ def compute_price_extremes(_dat):
 
 
 if __name__ == '__main__':
-    dat = utils.read_data(os.path.join('data_modified.xlsx'), input_schema)
+    dat = utils.read_data(os.path.join('data.xlsx'), input_schema)
     data_validation(dat)
     # utils.write_data(dat, 'input', input_schema) # optional
     sln = compute_price_extremes(dat)
