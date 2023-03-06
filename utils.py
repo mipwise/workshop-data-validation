@@ -6,7 +6,7 @@ from ticdat import TicDatFactory
 
 def _this_directory():
     return os.path.dirname(os.path.realpath(os.path.abspath(inspect.getsourcefile(_this_directory))))
-print(_this_directory())
+
 
 def read_data(input_data_loc, schema):
     """
