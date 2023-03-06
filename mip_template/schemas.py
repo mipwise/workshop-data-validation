@@ -75,39 +75,77 @@ text = {"strings_allowed": "*", "number_allowed": False}
 # region INPUT SCHEMA
 input_schema = PanDatFactory(
     parameters=[['Name'], ['Value']],  # Do not change the column names of the parameters table!
-    sample_input_table=[['Primary Key One', 'Primary Key Two'], ['Data Field One', 'Data Field Two']])
+    skus=[['SKU ID'], ['SKU Name', 'Units per Case']],
+    suppliers=[['Supplier ID'], ['Supplier Name', 'Status']],
+    price_tiers=[['SKU ID', 'Supplier ID', 'Tier ID'], ['Tier Start', 'Tier End', 'Price']])
 # endregion
 
 # region USER PARAMETERS
-input_schema.add_parameter('Sample Text Parameter', default_value='Any Text', number_allowed=False, strings_allowed='*')
-input_schema.add_parameter('Sample Two Values Parameter', default_value='Value 1', number_allowed=False,
-                           strings_allowed=['Value 1', 'Value 2'])
-input_schema.add_parameter('Sample Float Parameter', default_value=1.5, number_allowed=True, strings_allowed=(),
-                           must_be_int=False, min=0, inclusive_min=True, max=10, inclusive_max=True)
-input_schema.add_parameter('Sample Date Parameter', default_value='11/21/2022', datetime=True)
+input_schema.add_parameter('Container Type', default_value='Medium Size', number_allowed=False,
+                           strings_allowed=['Medium Size', 'Large Size'])
+input_schema.add_parameter('MIP Gap', default_value=0.05, number_allowed=True, strings_allowed=(),
+                           must_be_int=False, min=0, inclusive_min=True, max=1, inclusive_max=False)
 # endregion
 
 # region OUTPUT SCHEMA
 output_schema = PanDatFactory(
-    sample_output_table=[['Primary Key'], ['Data Field']])
+    skus_suppliers=[['SKU ID', 'Supplier ID'], ['SKU Name', 'Supplier Name', 'Order Quantity', 'Total Cost',
+                                                'Container Type']])
 # endregion
 
 # region DATA TYPES AND PREDICATES - INPUT SCHEMA
-# region sample_input_table
-table = 'sample_input_table'
-input_schema.set_data_type(table=table, field='Primary Key One', number_allowed=False, strings_allowed='*')
-input_schema.set_data_type(table=table, field='Primary Key Two', number_allowed=False, strings_allowed='*')
-input_schema.set_data_type(table=table, field='Data Field One', number_allowed=False,
-                           strings_allowed=('Option 1', 'Option 2'))
-input_schema.set_data_type(table=table, field='Data Field Two', number_allowed=True, strings_allowed=())
+# region skus table
+table = 'skus'
+input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='SKU Name', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='Units per Case', number_allowed=True, strings_allowed=(),
+                           must_be_int=True, min=1, inclusive_min=True)
+
+# endregion
+# region suppliers table
+table = 'suppliers'
+input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='Supplier Name', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='Status', number_allowed=False,
+                           strings_allowed=['Consolidated', 'New', 'Potential'])
+
+# endregion
+# region price_tiers table
+table = 'price_tiers'
+input_schema.set_data_type(table=table, field='SKU ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='Supplier ID', number_allowed=False, strings_allowed='*', nullable=False)
+input_schema.set_data_type(table=table, field='Tier ID', number_allowed=True, strings_allowed=(),
+                           must_be_int=True, min=1, inclusive_min=True, max=float("inf"), inclusive_max=False)
+input_schema.set_data_type(table=table, field='Tier Start', number_allowed=True, strings_allowed=False, min=0,
+                           must_be_int=False, inclusive_min=True, max=float("inf"), inclusive_max=False)
+input_schema.set_data_type(table=table, field='Tier End', number_allowed=True, strings_allowed=False, min=0,
+                           must_be_int=False, inclusive_min=False, max=float("inf"), inclusive_max=False)
+input_schema.set_data_type(table=table, field='Price', number_allowed=True, strings_allowed=False, min=0,
+                           inclusive_min=False, max=100, inclusive_max=False)
+
+input_schema.add_foreign_key(native_table=table, foreign_table='skus', mappings=('SKU ID', 'SKU ID'))
+input_schema.add_foreign_key(native_table=table, foreign_table='suppliers', mappings=('Supplier ID', 'Supplier ID'))
+
+input_schema.add_data_row_predicate(table=table, predicate_name='Tier Start <= Tier End',
+                                    predicate=lambda row: row['Tier Start'] <= row['Tier End']
+                                    if row['Tier Start'] == row['Tier Start'] and
+                                    row['Tier End'] == row['Tier End'] else False)
+
 # endregion
 # endregion
 
 # region DATA TYPES AND PREDICATES - OUTPUT SCHEMA
-# region sample_output_table
-table = 'sample_output_table'
-output_schema.set_data_type(table=table, field='Primary Key', number_allowed=False, strings_allowed='*')
-output_schema.set_data_type(table=table, field='Data Field', number_allowed=False, strings_allowed='*')
+# region skus_suppliers
+table = 'skus_suppliers'
+for field in ['SKU ID', 'Supplier ID', 'SKU Name', 'Supplier Name']:
+    output_schema.set_data_type(table=table, field=field, number_allowed=False, strings_allowed='*')
+output_schema.set_data_type(table=table, field='Order Quantity', number_allowed=True, strings_allowed=(),
+                            min=0, must_be_int=True, inclusive_min=True, max=float('inf'), inclusive_max=False)
+output_schema.set_data_type(table=table, field='Total Cost', number_allowed=True, strings_allowed=(),
+                            min=0, must_be_int=False, inclusive_min=True, max=float('inf'), inclusive_max=False)
+output_schema.set_data_type(table=table, field='Container Utilization', number_allowed=True, strings_allowed=(),
+                            min=0, must_be_int=False, inclusive_min=True, max=float('inf'), inclusive_max=False)
+
 # endregion
 # endregion
 
