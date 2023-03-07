@@ -1,6 +1,5 @@
 from schemas import input_schema, output_schema
 import utils
-import os
 
 
 def compute_price_extremes(dat):
@@ -26,7 +25,7 @@ def compute_price_extremes(dat):
 
 
 if __name__ == '__main__':
-    _dat = utils.read_data(os.path.join('data.xlsx'), input_schema)
+    _dat = utils.read_data('data.xlsx', input_schema)
     utils.check_data(_dat, input_schema)
     _sln = compute_price_extremes(_dat)
     utils.write_data(_sln, 'price_tiers_extremes.xlsx', output_schema)
