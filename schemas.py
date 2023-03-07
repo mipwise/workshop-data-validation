@@ -125,9 +125,7 @@ input_schema.add_foreign_key(native_table=table, foreign_table='skus', mappings=
 input_schema.add_foreign_key(native_table=table, foreign_table='suppliers', mappings=('Supplier ID', 'Supplier ID'))
 
 input_schema.add_data_row_predicate(table=table, predicate_name='Tier Start <= Tier End',
-                                    predicate=lambda row: row['Tier Start'] <= row['Tier End']
-                                    if row['Tier Start'] == row['Tier Start'] and
-                                    row['Tier End'] == row['Tier End'] else False)
+                                    predicate=lambda row: row['Tier Start'] <= row['Tier End'])
 # endregion
 # endregion
 
